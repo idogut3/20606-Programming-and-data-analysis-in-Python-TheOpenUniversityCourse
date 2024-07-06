@@ -6,7 +6,7 @@ def load_data(file_name: str) -> np.ndarray:
         raise ValueError("File name must be nasa.csv")
 
     try:
-        data = np.loadtxt(file_name)
+        data = np.loadtxt(file_name, dtype=str, delimiter=',')
         return data
     except FileNotFoundError:
         raise FileNotFoundError("Cant find nasa.csv in your project, check your project resources")
@@ -21,4 +21,3 @@ def load_data(file_name: str) -> np.ndarray:
 if __name__ == "__main__":
     array = load_data('nasa.csv')
     print(array)
-
