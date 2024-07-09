@@ -1,5 +1,7 @@
 import numpy as np
 
+from date import Date
+
 
 def load_data(file_name: str) -> np.ndarray:
     if file_name != 'nasa.csv':
@@ -29,3 +31,42 @@ def scoping_data(data: np.ndarray, names: list) -> np.ndarray:
         y_axis = 1
         data = np.delete(data, names_of_titles_of_columns_to_delete, y_axis)
     return data
+
+
+def mask_data(data: np.ndarray):
+    title = 'Close Approach Date'
+    threshold_date = Date("2000-01-01")
+    index_of_close_approach_date = np.where(data[0] == title)
+
+    values_to_compare_threshold_date = data[:, index_of_close_approach_date]
+
+    # Convert the dates in the "Close Approach Date" column to Date objects
+    dates = [Date(values_to_compare_threshold_date[date_index][0][0]) for date_index in
+             range(1, len(values_to_compare_threshold_date))]
+    mask = np.array([(dates[i].year_difference(threshold_date) >= 0) for i in range(len(dates))])
+
+    x_axis = 0
+    data = np.delete(data, np.where(mask == False)[0] + 1, x_axis)
+    return data
+
+
+arr = [
+    ['rar', 'Close Approach Date', 'AVIRON'],
+    ['rar1', '1995-01-01', 'AVIRON1'],
+    ['rar2', '1995-01-01', 'AVIRON2'],
+    ['rar3', '1995-01-01', 'AVIRON3'],
+    ['rar4', '9999-01-01', 'AVIRON4'],
+    ['rar5', '1995-01-01', 'AVIRON5'],
+    ['rar6', '1995-01-01', 'AVIRON6'],
+    ['rar7', '1995-01-01', 'AVIRON7'],
+    ['rar8', '1995-01-01', 'AVIRON8'],
+    ['rar9', '1995-01-01', 'AVIRON9'],
+    ['rar10', '1995-01-01', 'AVIRON10'],
+    ['rar11', '2000-01-01', 'AVIRON11'],
+    ['rar12', '2001-01-01', 'AVIRON12'],
+    ['rar13', '1995-01-01', 'AVIRON13'],
+    ['rar14', '2025-05-01', 'AVIRON14'],
+]
+
+arr = np.array(arr)
+print(mask_data(arr))
