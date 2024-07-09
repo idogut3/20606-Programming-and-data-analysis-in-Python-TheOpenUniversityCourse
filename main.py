@@ -50,23 +50,41 @@ def mask_data(data: np.ndarray) -> np.ndarray:
     return data
 
 
+def data_details(data: np.ndarray) -> np.ndarray:
+    titles_to_delete = ['Neo Reference ID', 'Orbiting Body', 'Equinox']
+
+    for title in titles_to_delete:
+        index_of_title_to_delete = np.where(data[0] == title)
+        data = np.delete(data, index_of_title_to_delete, 1)
+
+    rows = len(data)
+    columns = len(data[0])
+    print("Number of rows: ", rows)
+    print("Number of columns: ", columns)
+    print('Titles of table:')
+    for title in data[0]:
+        print(title, end=', ')
+    print('\n')
+    return data
+
+
 arr = [
-    ['rar', 'Close Approach Date', 'AVIRON'],
-    ['rar1', '1995-01-01', 'AVIRON1'],
-    ['rar2', '1995-01-01', 'AVIRON2'],
-    ['rar3', '1995-01-01', 'AVIRON3'],
-    ['rar4', '9999-01-01', 'AVIRON4'],
-    ['rar5', '1995-01-01', 'AVIRON5'],
-    ['rar6', '1995-01-01', 'AVIRON6'],
-    ['rar7', '1995-01-01', 'AVIRON7'],
-    ['rar8', '1995-01-01', 'AVIRON8'],
-    ['rar9', '1995-01-01', 'AVIRON9'],
-    ['rar10', '1995-01-01', 'AVIRON10'],
-    ['rar11', '2000-01-01', 'AVIRON11'],
-    ['rar12', '2001-01-01', 'AVIRON12'],
-    ['rar13', '1995-01-01', 'AVIRON13'],
-    ['rar14', '2025-05-01', 'AVIRON14'],
+    ['Neo Reference ID', 'Orbiting Body', 'Equinox', 'TITLE_AMEICA', 'TITILE_FUCKYEAH'],
+    ['rar1', '1995-01-01', 'AVIRON1', 'AMERICA', 'FUCKYEAH'],
+    ['rar2', '1995-01-01', 'AVIRON2', 'AMER2ICA', 'FUCKYEAH2'],
+    ['rar3', '1995-01-01', 'AVIRON3', 'AMERAAICA', 'FUCKYEAH'],
+    ['rar4', '9999-01-01', 'AVIRON4', 'AMERICA', 'FUC3KYEAH'],
+    ['rar5', '1995-01-01', 'AVIRON5', 'AMERDICA', 'FUCKYEAH'],
+    ['rar6', '1995-01-01', 'AVIRON6', 'AMERICA', 'FUCK4YEAH'],
+    ['rar7', '1995-01-01', 'AVIRON7', 'AMERI2CA', 'FUCK5YEAH'],
+    ['rar8', '1995-01-01', 'AVIRON8', 'AMERIACA', 'FUCKYEAH'],
+    ['rar9', '1995-01-01', 'AVIRON9', 'AMERIWCA', 'FUCKY6EAH'],
+    ['rar10', '1995-01-01', 'AVIRON10', 'AMEXRICA', '7FUCKYEAH'],
+    ['rar11', '2000-01-01', 'AVIRON11', 'AMERICA', 'FUCKYEAH'],
+    ['rar12', '2001-01-01', 'AVIRON12', 'AMERAICA', 'FUC7KYEAH'],
+    ['rar13', '1995-01-01', 'AVIRON13', 'AMESRICA', 'FUCKYEAH'],
+    ['rar14', '2025-05-01', 'AVIRON14', 'AMESRICA', 'FUCKY7EAH'],
 ]
 
 arr = np.array(arr)
-print(mask_data(arr))
+print(data_details(arr))
