@@ -33,7 +33,7 @@ def scoping_data(data: np.ndarray, names: list) -> np.ndarray:
     return data
 
 
-def mask_data(data: np.ndarray):
+def mask_data(data: np.ndarray) -> np.ndarray:
     title = 'Close Approach Date'
     threshold_date = Date("2000-01-01")
     index_of_close_approach_date = np.where(data[0] == title)
