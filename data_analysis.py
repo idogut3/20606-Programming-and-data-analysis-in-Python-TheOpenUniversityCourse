@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import stats
 
 
 def max_absolute_magnitude(data: np.ndarray) -> tuple:
@@ -89,3 +90,11 @@ def min_max_diameter(data: np.ndarray) -> tuple:
         min_sum += float(data[i][index_of_est_dia_in_km_min])
         max_sum += float(data[i][index_of_est_dia_in_km_max])
     return min_sum / (len(data) - 1), max_sum / (len(data) - 1)
+
+
+def is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid(magnitudes, velocities) -> bool:
+    a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
+
+    if p_value < 0.05:  # There is a linear relationship between the absolute magnitude to the velocity of the asteroid
+        return True
+    return False

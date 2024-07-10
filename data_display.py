@@ -1,8 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy import stats
 
 from data_analysis import min_max_diameter
 from data_preparation import load_data
+from data_analysis import is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid
 
 
 def plt_hist_diameter(data: np.ndarray):
@@ -94,6 +96,40 @@ def plt_pie_hazard(data: np.ndarray):
     plt.show()
 
 
+def plt_liner_motion_magnitude(data: np.ndarray):
+    # Setting the titles
+    plt.title('Linear regression graph displaying the relationship between absolute magnitude and miles per hour')
+    plt.xlabel('Absolute magnitude')
+    plt.ylabel('Velocities (miles per hour)')
+
+    # Extract column titles
+    title_magnitude = 'Absolute Magnitude'
+    title_velocity = 'Miles per hour'
+
+    try:
+        index_magnitude = np.where(data[0] == title_magnitude)[0][0]
+        index_velocity = np.where(data[0] == title_velocity)[0][0]
+    except IndexError:
+        raise ValueError(f"Columns '{title_magnitude}' or '{title_velocity}' not found in the data.")
+
+    # Extract data values from the columns (excluding header)
+    magnitudes = data[1:, index_magnitude].astype(float)
+    velocities = data[1:, index_velocity].astype(float)
+
+    is_there_linear_relationship_between_the_absolute_magnitude_to_velocity_of_asteroid = \
+        is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid(magnitudes=magnitudes,
+                                                                                        velocities=velocities)
+    print('Is there a linear relationship between the absolute magnitude to the velocity of the asteroid',
+          is_there_linear_relationship_between_the_absolute_magnitude_to_velocity_of_asteroid)
+
+    # Calculating the graph we need to show
+    a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
+
+    plt.scatter(magnitudes, velocities)  # Drawing all the points on the graph
+    plt.plot(magnitudes, a * magnitudes + b)
+    plt.show()
+
+
 if __name__ == '__main__':
     data = load_data('nasa.csv')
-    plt_pie_hazard(data)
+    plt_liner_motion_magnitude(data)
