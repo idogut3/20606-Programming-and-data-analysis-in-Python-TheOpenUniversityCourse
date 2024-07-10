@@ -39,9 +39,34 @@ def plt_hist_diameter(data: np.ndarray):
     plt.show()
 
 
-# def plt_hist_common_orbit(data: np.ndarray):
+def plt_hist_common_orbit(data: np.ndarray):
+    # Setting the titles
+    plt.title('Histogram of asteroid by minimum orbit intersection')
+    plt.xlabel('Minimum orbit intersection')
+    plt.ylabel('Number of asteroids')
+
+    column_title = 'Orbit ID'
+
+    try:
+        column_index = np.where(data[0] == column_title)[0][0]
+    except IndexError:
+        raise ValueError(f"Column '{column_title}' not found in the data.")
+
+    # Extract the 'Orbit ID' column values (excluding the header)
+    column_values = data[1:, column_index].astype(float)
+    min_orbit = np.min(column_values)
+    max_orbit = np.max(column_values)
+
+    # Define the bins for the histogram
+    num_of_bins = 6
+    num_of_edges = num_of_bins + 1
+    bins = np.linspace(min_orbit, max_orbit, num_of_edges)  # 6 bins means 7 edges
+
+    plt.hist(column_values, bins=bins, edgecolor='black')
+    plt.grid(True)
+    plt.show()
 
 
 if __name__ == '__main__':
     data = load_data('nasa.csv')
-    plt_hist_diameter(data)
+    plt_hist_common_orbit(data)
