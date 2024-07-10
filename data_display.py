@@ -67,6 +67,33 @@ def plt_hist_common_orbit(data: np.ndarray):
     plt.show()
 
 
+def plt_pie_hazard(data: np.ndarray):
+    plt.title('Percentage of hazardous and non-hazardous asteroids')
+
+    column_title = 'Hazardous'
+    try:
+        column_index = np.where(data[0] == column_title)[0][0]
+    except IndexError:
+        raise ValueError(f"Column '{column_title}' not found in the data.")
+
+    # Extract the 'Hazardous' column values (excluding the header)
+    column_values = data[1:, column_index]
+    unique, counts = np.unique(column_values, return_counts=True)
+
+    counts_dict = dict(zip(unique, counts))
+
+    hazardous_count = counts_dict.get('True', 0)
+    non_hazardous_count = counts_dict.get('False', 0)
+
+    # Define the labels, colors and sizes for the pie chart
+    labels = ['Hazardous', 'Non-Hazardous']
+    colors = ['red', 'green']
+    sizes = [hazardous_count, non_hazardous_count]
+
+    plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%')
+    plt.show()
+
+
 if __name__ == '__main__':
     data = load_data('nasa.csv')
-    plt_hist_common_orbit(data)
+    plt_pie_hazard(data)
