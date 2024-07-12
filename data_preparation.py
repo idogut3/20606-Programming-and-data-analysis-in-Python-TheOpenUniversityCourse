@@ -79,9 +79,14 @@ def scoping_data(data: np.ndarray, names: list) -> np.ndarray:
 
 
 def mask_data(data: np.ndarray) -> np.ndarray:
-    title = 'Close Approach Date'
+    approach_date_title = 'Close Approach Date'
     threshold_date = Date("2000-01-01")
-    index_of_close_approach_date = np.where(data[0] == title)
+    index_of_close_approach_date = np.where(data[0] == approach_date_title)
+
+    try:
+        index_of_close_approach_date = np.where(data[0] == approach_date_title)
+    except IndexError:
+        raise ValueError(f"Column '{approach_date_title}' not found in the data.")
 
     values_to_compare_threshold_date = data[:, index_of_close_approach_date]
 

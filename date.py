@@ -1,4 +1,13 @@
 class Date:
+    """
+     Represents a date with year, month, and day components.
+
+     Attributes:
+         year (int): The year of the date.
+         month (int): The month of the date.
+         day (int): The day of the date.
+     """
+
     def __init__(self, date_string):
         year, month, day = date_string.split('-')
         self.year = int(year)
