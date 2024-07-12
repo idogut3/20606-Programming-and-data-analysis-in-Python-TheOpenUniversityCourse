@@ -127,10 +127,11 @@ def plt_pie_hazard(data: np.ndarray):
     # Extract the 'Hazardous' column values (excluding the header)
     hazardous_column_values = data[1:, column_index]
 
+    # Count occurrences of 'True' and 'False' in the 'Hazardous' column
     unique, counts = np.unique(hazardous_column_values, return_counts=True)
-
     counts_dict = dict(zip(unique, counts))
 
+    # Get counts of hazardous and non-hazardous asteroids
     hazardous_count = counts_dict.get('True', 0)
     non_hazardous_count = counts_dict.get('False', 0)
 
@@ -168,21 +169,30 @@ def plt_liner_motion_magnitude(data: np.ndarray):
     title_magnitude = 'Absolute Magnitude'
     title_velocity = 'Miles per hour'
 
-    try:
+    try:  # Trying to find the indexes for each column title
         index_magnitude = np.where(data[0] == title_magnitude)[0][0]
         index_velocity = np.where(data[0] == title_velocity)[0][0]
-    except IndexError:
+    except IndexError:  # Did not find at least one of the columns with the specified names we gave
         raise ValueError(f"Columns '{title_magnitude}' or '{title_velocity}' not found in the data.")
 
     # Extract data values from the columns (excluding header)
     magnitudes = data[1:, index_magnitude].astype(float)
     velocities = data[1:, index_velocity].astype(float)
 
+    # Checking to see if there is a linear relationship between the absolute magnitude to the velocity of the asteroid
     is_there_linear_relationship_between_the_absolute_magnitude_to_velocity_of_asteroid = \
-        is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid(magnitudes=magnitudes,
-                                                                                        velocities=velocities)
-    print('Is there a linear relationship between the absolute magnitude to the velocity of the asteroid',
-          is_there_linear_relationship_between_the_absolute_magnitude_to_velocity_of_asteroid)
+        is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid(
+            magnitudes=magnitudes,
+            velocities=velocities)
+
+    print('Is there a linear relationship between the absolute magnitude to the velocity of the asteroid')
+
+    if is_there_linear_relationship_between_the_absolute_magnitude_to_velocity_of_asteroid:
+        print('Yes, there is a linear relationship between the absolute magnitude to the velocity of the asteroid')
+    else:
+        print(
+            'No, there is no linear relationship between the absolute magnitude to the velocity of the asteroid but '
+            'there could be a non linear one')
 
     # Calculating the graph we need to show
     a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
