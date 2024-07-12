@@ -6,6 +6,18 @@ from data_analysis import min_max_diameter
 from data_preparation import load_data
 from data_analysis import is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid
 
+"""
+    @function plt_hist_diameter
+
+    :param data: np.ndarray
+
+    @description:
+    The function gets data, an np.ndarray containing a table of rows and columns with data inside of them.
+    It displays a histogram graph of the amount of asteroids according to their average diameter per km.
+    The graph includes 10 Diameter averages which ranges between the minimum average diameter value per km to 
+    the maximum average diameter value per km.
+"""
+
 
 def plt_hist_diameter(data: np.ndarray):
     # Setting the titles
@@ -41,6 +53,18 @@ def plt_hist_diameter(data: np.ndarray):
     plt.show()
 
 
+"""
+    @function plt_hist_common_orbit
+
+    :param data: np.ndarray
+
+    @description:
+    The function gets data, an np.ndarray containing a table of rows and columns with data inside of them.
+    It displays a histogram graph of the amount of asteroids according to their orbit. 
+    There are different 6 track ranges starting from the minimum track value to the maximum track value.
+"""
+
+
 def plt_hist_common_orbit(data: np.ndarray):
     # Setting the titles
     plt.title('Histogram of asteroid by minimum orbit intersection')
@@ -69,6 +93,18 @@ def plt_hist_common_orbit(data: np.ndarray):
     plt.show()
 
 
+"""
+    @function plt_pie_hazard
+
+    :param data: np.ndarray
+
+    @description:
+     The function gets data, an np.ndarray containing a table of rows and columns with data inside of them.
+     It displays the percentages of the the hazardous and non-hazardous asteroids according to the classification 
+     of the Hazardous column in the data array in a pie graph.
+"""
+
+
 def plt_pie_hazard(data: np.ndarray):
     plt.title('Percentage of hazardous and non-hazardous asteroids')
 
@@ -94,6 +130,20 @@ def plt_pie_hazard(data: np.ndarray):
 
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%')
     plt.show()
+
+
+"""
+    @function plt_liner_motion_magnitude
+
+    :param data: np.ndarray
+
+    @description:
+     The function gets data, an np.ndarray containing a table of rows and columns with data inside of them.
+     It checks whether there is a linear relationship between the magnitude of the maximum sacrifice to the Earth 
+     (Absolute Magnitude) of each asteroid to it's speed of movement (Miles per hour).
+     It prints out the result (True or False) and also draws up the graph.
+     (the linear regression graph with the points and the line displaying the relationship).
+"""
 
 
 def plt_liner_motion_magnitude(data: np.ndarray):
@@ -125,7 +175,8 @@ def plt_liner_motion_magnitude(data: np.ndarray):
     # Calculating the graph we need to show
     a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
 
-    plt.scatter(magnitudes, velocities)  # Drawing all the points on the graph
-    plt.plot(magnitudes, a * magnitudes + b, 'red')
-    plt.show()
+    plt.scatter(magnitudes, velocities, label='Data points')  # Drawing all the points on the graph
+    plt.plot(magnitudes, a * magnitudes + b, color='red', label=f'Fitted line r={r_value}')  # Drawing the line
 
+    plt.legend(loc="upper right")
+    plt.show()
