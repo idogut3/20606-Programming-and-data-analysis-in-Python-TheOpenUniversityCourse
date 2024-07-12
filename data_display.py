@@ -25,29 +25,37 @@ def plt_hist_diameter(data: np.ndarray):
     plt.xlabel('Average diameter (in km)')
     plt.ylabel('Number of asteroids')
 
+    # Getting the tuple containing the minimum_average_diameter_value_per_km and
+    # the maximum_average_diameter_value_per_km
     min_max_diameter_tuple = min_max_diameter(data)
     minimum_average_diameter_value_per_km = min_max_diameter_tuple[0]
     maximum_average_diameter_value_per_km = min_max_diameter_tuple[1]
 
-    bins = np.linspace(minimum_average_diameter_value_per_km, maximum_average_diameter_value_per_km, 11)
+    num_of_bins = 10
+    num_of_edges = num_of_bins + 1
+    bins = np.linspace(minimum_average_diameter_value_per_km, maximum_average_diameter_value_per_km, num_of_edges)
 
-    title_min = 'Est Dia in KM(min)'
-    title_max = 'Est Dia in KM(max)'
+    minimum_diameter_value_per_km_title_name = 'Est Dia in KM(min)'
+    maximum_diameter_value_per_km_title_name = 'Est Dia in KM(max)'
 
-    try:
-        index_of_est_dia_in_km_min = np.where(data[0] == title_min)[0][0]
-        index_of_est_dia_in_km_max = np.where(data[0] == title_max)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{title_min}' or '{title_max}' not found in the data.")
+    try:  # Trying to find the indexes for each column title
+        index_of_est_dia_in_km_min = np.where(data[0] == minimum_diameter_value_per_km_title_name)[0][0]
+        index_of_est_dia_in_km_max = np.where(data[0] == maximum_diameter_value_per_km_title_name)[0][0]
+    except IndexError:  # Did not find at least one of the columns with the specified names we gave
+        raise ValueError(
+            f"Column '{minimum_diameter_value_per_km_title_name}' or '{maximum_diameter_value_per_km_title_name}' not "
+            f"found in the data.")
 
     average_diameters = []
 
+    # Calculating the averages
     for i in range(1, len(data)):
-        min_dia = float(data[i][index_of_est_dia_in_km_min])
-        max_dia = float(data[i][index_of_est_dia_in_km_max])
-        avg_dia = (min_dia + max_dia) / 2
-        average_diameters.append(avg_dia)
+        current_asteroid_min_diameter = float(data[i][index_of_est_dia_in_km_min])
+        current_asteroid_max_diameter = float(data[i][index_of_est_dia_in_km_max])
+        current_asteroid_average_diameter = (current_asteroid_min_diameter + current_asteroid_max_diameter) / 2
+        average_diameters.append(current_asteroid_average_diameter)
 
+    # Drawing the graph
     plt.hist(average_diameters, bins=bins, edgecolor='black')
     plt.grid(True)
     plt.show()
@@ -71,24 +79,25 @@ def plt_hist_common_orbit(data: np.ndarray):
     plt.xlabel('Minimum orbit intersection')
     plt.ylabel('Number of asteroids')
 
-    column_title = 'Orbit ID'
+    orbit_id_column_title = 'Orbit ID'
 
-    try:
-        column_index = np.where(data[0] == column_title)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{column_title}' not found in the data.")
+    try:  # Trying to find the indexes for the column title
+        column_index = np.where(data[0] == orbit_id_column_title)[0][0]
+    except IndexError:  # Did not find the index of the column's title with the specified name for the orbit_id
+        raise ValueError(f"Column '{orbit_id_column_title}' not found in the data.")
 
     # Extract the 'Orbit ID' column values (excluding the header)
-    column_values = data[1:, column_index].astype(float)
-    min_orbit = np.min(column_values)
-    max_orbit = np.max(column_values)
+    orbit_id_column_values = data[1:, column_index].astype(float)
+    min_orbit = np.min(orbit_id_column_values)
+    max_orbit = np.max(orbit_id_column_values)
 
     # Define the bins for the histogram
     num_of_bins = 6
     num_of_edges = num_of_bins + 1
     bins = np.linspace(min_orbit, max_orbit, num_of_edges)  # 6 bins means 7 edges
 
-    plt.hist(column_values, bins=bins, edgecolor='black')
+    # Drawing the graph
+    plt.hist(orbit_id_column_values, bins=bins, edgecolor='black')
     plt.grid(True)
     plt.show()
 
@@ -106,17 +115,19 @@ def plt_hist_common_orbit(data: np.ndarray):
 
 
 def plt_pie_hazard(data: np.ndarray):
+    # Setting the title
     plt.title('Percentage of hazardous and non-hazardous asteroids')
 
-    column_title = 'Hazardous'
-    try:
-        column_index = np.where(data[0] == column_title)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{column_title}' not found in the data.")
+    hazardous_column_title = 'Hazardous'
+    try:  # Trying to find the indexes for the column title
+        column_index = np.where(data[0] == hazardous_column_title)[0][0]
+    except IndexError:  # Did not find the index of the column's title with the specified name
+        raise ValueError(f"Column '{hazardous_column_title}' not found in the data.")
 
     # Extract the 'Hazardous' column values (excluding the header)
-    column_values = data[1:, column_index]
-    unique, counts = np.unique(column_values, return_counts=True)
+    hazardous_column_values = data[1:, column_index]
+
+    unique, counts = np.unique(hazardous_column_values, return_counts=True)
 
     counts_dict = dict(zip(unique, counts))
 
@@ -128,6 +139,7 @@ def plt_pie_hazard(data: np.ndarray):
     colors = ['red', 'green']
     sizes = [hazardous_count, non_hazardous_count]
 
+    # Drawing the pie chart
     plt.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%')
     plt.show()
 

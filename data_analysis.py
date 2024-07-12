@@ -17,26 +17,32 @@ from scipy import stats
 
 
 def max_absolute_magnitude(data: np.ndarray) -> tuple:
-    title = 'Absolute Magnitude'
-    title1 = 'Name'
+    absolute_magnitude_title = 'Absolute Magnitude'
+    name_of_asteroid_column_title = 'Name'
 
-    try:
-        index_of_absolute_magnitude_title = np.where(data[0] == title)[0][0]
-        index_of_name_title = np.where(data[0] == title1)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{title}' or '{title1}' not found in the data.")
+    try:  # Trying to find the indexes for each column title
+        index_of_absolute_magnitude_title = np.where(data[0] == absolute_magnitude_title)[0][0]
+        index_of_name_title = np.where(data[0] == name_of_asteroid_column_title)[0][0]
 
-    max_dist = float(data[1][index_of_absolute_magnitude_title])
-    max_dist_index = 1
+    except IndexError:  # Did not find at least one of the columns with the specified names we gave
+        raise ValueError(
+            f"Column '{absolute_magnitude_title}' or '{name_of_asteroid_column_title}' not found in the data.")
 
+    max_distance = float(data[1][index_of_absolute_magnitude_title])
+    max_distance_index = 1
+
+    # Looping through all the max_distances of each asteroid and checking to see which is the largest
+    # 2 is because we do not include the title name (because we are trying to find the values not the string title duh,
+    # and we start out with the comparing from the second element because our first element is the first value we
+    # compare from ie: we do not compare arr[1] to arr[1] because it is a wasted action, so we compare arr[1] to arr[2]
     for i in range(2, len(data)):
         current_value = float(data[i][index_of_absolute_magnitude_title])
-        if current_value > max_dist:
-            max_dist = current_value
-            max_dist_index = i
+        if current_value > max_distance:
+            max_distance = current_value
+            max_distance_index = i
 
-    name_with_max_dist = data[max_dist_index][index_of_name_title]
-    return int(name_with_max_dist), max_dist
+    name_with_max_dist = data[max_distance_index][index_of_name_title]
+    return int(name_with_max_dist), max_distance
 
 
 """
@@ -54,25 +60,31 @@ def max_absolute_magnitude(data: np.ndarray) -> tuple:
 
 
 def closest_to_earth(data: np.ndarray):
-    title = 'Miss Dist.(kilometers)'
-    title1 = 'Name'
+    distance_from_earth_in_km_title = 'Miss Dist.(kilometers)'
+    name_of_asteroid_column_title = 'Name'
 
-    try:
-        index_of_miss_dist_in_kilometers = np.where(data[0] == title)[0][0]
-        index_of_name_title = np.where(data[0] == title1)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{title}' or '{title1}' not found in the data.")
+    try:  # Trying to find the indexes for each column title
+        index_of_miss_dist_in_kilometers = np.where(data[0] == distance_from_earth_in_km_title)[0][0]
+        index_of_name_title = np.where(data[0] == name_of_asteroid_column_title)[0][0]
+    except IndexError:  # Did not find at least one of the columns with the specified names we gave
+        raise ValueError(
+            f"Column '{distance_from_earth_in_km_title}' or '{name_of_asteroid_column_title}' not found in the data.")
 
-    min_dist = float(data[1][index_of_miss_dist_in_kilometers])
-    min_dist_index = 1
+    min_distance = float(data[1][index_of_miss_dist_in_kilometers])
+    min_distance_index = 1
 
+    # Looping through all the distances from earth in km value for each asteroid and checking to see which is the 
+    # closest to earth.
+    # 2 is because we do not include the title name (because we are trying to find the values not the string title duh,
+    # and we start out with the comparing from the second element because our first element is the first value we
+    # compare from ie: we do not compare arr[1] to arr[1] because it is a wasted action, so we compare arr[1] to arr[2]
     for i in range(2, len(data)):
         current_value = float(data[i][index_of_miss_dist_in_kilometers])
-        if current_value < min_dist:
-            min_dist = current_value
-            min_dist_index = i
+        if current_value < min_distance:
+            min_distance = current_value
+            min_distance_index = i
 
-    name_with_min_dist = data[min_dist_index][index_of_name_title]
+    name_with_min_dist = data[min_distance_index][index_of_name_title]
     return int(name_with_min_dist)
 
 
@@ -92,28 +104,29 @@ def closest_to_earth(data: np.ndarray):
 
 def common_orbit(data: np.ndarray) -> dict:
     # Define the title of the column we're interested in
-    column_title = 'Orbit ID'
+    orbit_id_column_title = 'Orbit ID'
 
-    try:
-        # Find the index of the 'Orbit ID' column
-        column_index = np.where(data[0] == column_title)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{column_title}' not found in the data.")
+    try:  # Trying to find the index of the 'Orbit ID' column
+        column_index = np.where(data[0] == orbit_id_column_title)[0][0]
+    except IndexError:  # Did not find the index of the column's title with the specified name for the orbit_id 
+        raise ValueError(f"Column '{orbit_id_column_title}' not found in the data.")
 
     # Extract the 'Orbit ID' column values (excluding the header)
-    column_values = data[1:, column_index]
+    column_orbit_id_values = data[1:, column_index]
 
     # Count occurrences using a dictionary
     value_counts = {}
-    for value in column_values:
+    for value in column_orbit_id_values:
         if value in value_counts:
             value_counts[value] += 1
         else:
             value_counts[value] = 1
 
-    converted_dict = {str(key): value for key, value in value_counts.items()}
+    # Creating a dict with the corrected values for each key  orbit ID (Orbit ID) it's value (amount of asteroids in 
+    # each orbit) 
+    orbit_id_amount_of_asteroids_per_orbit_dictionary = {str(key): value for key, value in value_counts.items()}
 
-    return converted_dict
+    return orbit_id_amount_of_asteroids_per_orbit_dictionary
 
 
 """
@@ -131,17 +144,19 @@ def common_orbit(data: np.ndarray) -> dict:
 
 
 def min_max_diameter(data: np.ndarray) -> tuple:
-    title = 'Est Dia in KM(min)'
-    title1 = 'Est Dia in KM(max)'
+    average_value_of_the_minimum_diameter_per_km_title_name = 'Est Dia in KM(min)'
+    average_value_of_the_maximum_diameter_per_km_title_name = 'Est Dia in KM(max)'
     min_sum = 0
     max_sum = 0
 
-    try:
-        index_of_est_dia_in_km_min = np.where(data[0] == title)[0][0]
-        index_of_est_dia_in_km_max = np.where(data[0] == title1)[0][0]
-    except IndexError:
-        raise ValueError(f"Column '{title}' or '{title1}' not found in the data.")
+    try:  # Trying to find the indexes for each column title
+        index_of_est_dia_in_km_min = np.where(data[0] == average_value_of_the_minimum_diameter_per_km_title_name)[0][0]
+        index_of_est_dia_in_km_max = np.where(data[0] == average_value_of_the_maximum_diameter_per_km_title_name)[0][0]
+    except IndexError:  # Did not find at least one of the columns with the specified names we gave
+        raise ValueError(
+            f"Column '{average_value_of_the_minimum_diameter_per_km_title_name}' or '{average_value_of_the_maximum_diameter_per_km_title_name}' not found in the data.")
 
+    # Calculating the averages with a for loop
     for i in range(1, len(data)):
         min_sum += float(data[i][index_of_est_dia_in_km_min])
         max_sum += float(data[i][index_of_est_dia_in_km_max])
@@ -166,8 +181,8 @@ def min_max_diameter(data: np.ndarray) -> tuple:
 
 
 def is_there_linear_relationship_between_absolute_magnitude_to_velocity_of_asteroid(magnitudes, velocities) -> bool:
+    # Calculating all the values for the linear regression using the scipy.stats library
     a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
-
     if p_value < 0.05:  # There is a linear relationship between the absolute magnitude to the velocity of the asteroid
         return True
     return False
