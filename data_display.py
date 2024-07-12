@@ -197,8 +197,9 @@ def plt_liner_motion_magnitude(data: np.ndarray):
     # Calculating the graph we need to show
     a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
 
+    r_value_rounded = round(r_value, 2)
     plt.scatter(magnitudes, velocities, label='Data points')  # Drawing all the points on the graph
-    plt.plot(magnitudes, a * magnitudes + b, color='red', label=f'Fitted line r={r_value}')  # Drawing the line
+    plt.plot(magnitudes, a * magnitudes + b, color='red', label=f'Fitted line r={r_value_rounded}')  # Drawing the line
 
     plt.legend(loc="upper right")
     plt.show()

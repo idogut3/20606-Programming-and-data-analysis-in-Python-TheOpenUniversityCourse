@@ -1,6 +1,5 @@
 from data_analysis import *
 from data_preparation import *
-from date import *
 from data_display import *
 
 if __name__ == '__main__':
