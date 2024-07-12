@@ -126,10 +126,6 @@ def plt_liner_motion_magnitude(data: np.ndarray):
     a, b, r_value, p_value, std_err = stats.linregress(magnitudes, velocities)
 
     plt.scatter(magnitudes, velocities)  # Drawing all the points on the graph
-    plt.plot(magnitudes, a * magnitudes + b)
+    plt.plot(magnitudes, a * magnitudes + b, 'red')
     plt.show()
 
-
-if __name__ == '__main__':
-    data = load_data('nasa.csv')
-    plt_liner_motion_magnitude(data)

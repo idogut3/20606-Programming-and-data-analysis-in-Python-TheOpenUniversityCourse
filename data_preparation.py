@@ -66,5 +66,3 @@ def data_details(data: np.ndarray) -> np.ndarray:
         print(title, end=', ')
     print('\n')
     return data
-
-
